@@ -34,7 +34,7 @@ object NetworkModule {
             }
             defaultRequest {
                 contentType(ContentType.Application.Json)
-                url("http://192.168.1.215:8080/")
+                url("https://api.unisphere-db.it/")
 
                 // Recupera il token salvato dal tuo TokenManager
                 val token = tokenManager.getToken()

@@ -12,7 +12,7 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
 object ApiClient {
-    private const val BASE_URL = "http://192.168.1.215:8080" // L'IP del tuo server
+    private const val BASE_URL = "https://api.unisphere-db.it" // L'IP del tuo server
 
     // Passiamo il TokenManager come parametro per crearlo dinamicamente
     fun create(tokenManager: TokenManager): HttpClient {
