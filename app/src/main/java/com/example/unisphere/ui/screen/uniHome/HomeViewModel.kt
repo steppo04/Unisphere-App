@@ -369,15 +369,29 @@ class UniHomeViewModel @Inject constructor(
 
                     repository.deleteHouse(houseId)
                         .onSuccess {
+                            // Il server ha confermato l'eliminazione: azzera subito
+                            // lo stato locale per mostrare la schermata senza casa.
+                            // Non richiamare fetchUserMembership() qui: una risposta
+                            // temporaneamente obsoleta potrebbe ripristinare la vecchia casa.
                             _state.update {
                                 it.copy(
+                                    hasHouse = false,
+                                    houseId = null,
+                                    houseName = "",
+                                    adminId = -1,
+                                    members = emptyList(),
+                                    cleaningRotations = emptyList(),
+                                    balances = emptyList(),
+                                    transactions = emptyList(),
+                                    selectedMembersForSplit = emptyList(),
+                                    selectedSettleDebtor = null,
                                     showDeleteHouseConfirm = false,
-                                    isLoading = true
+                                    showLeaveHouseConfirm = false,
+                                    showAllTxDetailsPage = false,
+                                    isLoading = false
                                 )
                             }
-
                             showSnackbar("Casa eliminata definitivamente.")
-                            fetchUserMembership()
                         }
                         .onFailure { error ->
                             error.printStackTrace()

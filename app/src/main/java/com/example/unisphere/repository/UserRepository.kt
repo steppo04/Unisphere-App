@@ -63,13 +63,31 @@ class UserRepository @Inject constructor(
     suspend fun getCurrentUserProfile(): UserProfileDto? {
         return try {
             val response = client.get("/users/me")
+            android.util.Log.d(
+                "PROFILE_DEBUG",
+                "HTTP status: ${response.status.value}"
+            )
+
             if (response.status == HttpStatusCode.OK) {
-                response.body<UserProfileDto>()
+                val profile = response.body<UserProfileDto>()
+                android.util.Log.d(
+                    "PROFILE_DEBUG",
+                    "Profilo deserializzato correttamente: id=${profile.id}, username=${profile.username}, theme=${profile.currentTheme}"
+                )
+                profile
             } else {
+                android.util.Log.e(
+                    "PROFILE_DEBUG",
+                    "Risposta HTTP non OK: ${response.status.value}"
+                )
                 null
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e(
+                "PROFILE_DEBUG",
+                "Errore caricamento profilo: ${e.javaClass.simpleName}: ${e.message}",
+                e
+            )
             null
         }
     }
