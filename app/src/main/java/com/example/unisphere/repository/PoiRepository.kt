@@ -34,7 +34,30 @@ class PoiRepository @Inject constructor(
     /**
      * Elimina un punto di interesse usando il suo ID.
      */
-    suspend fun deletePoi(poiId: String): Result<Unit> = runCatching {
-        client.delete("/pois/$poiId")
-    }
+
+    suspend fun deletePoi(poiId: Int): Result<Unit> =
+        runCatching {
+            android.util.Log.d(
+                "POI_DELETE",
+                "Inizio eliminazione: ID=$poiId"
+            )
+
+            val response = client.delete("/pois/$poiId")
+
+            android.util.Log.d(
+                "POI_DELETE",
+                "Risposta server: ID=$poiId, HTTP=${response.status.value}"
+            )
+
+            if (response.status.value !in 200..299) {
+                error("HTTP ${response.status.value}")
+            }
+        }.onFailure { error ->
+            android.util.Log.e(
+                "POI_DELETE",
+                "Errore eliminando ID=$poiId",
+                error
+            )
+        }
+
 }

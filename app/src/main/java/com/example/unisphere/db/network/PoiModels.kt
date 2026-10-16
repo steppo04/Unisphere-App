@@ -4,11 +4,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PointOfInterestDto(
-    val id: String, // Assumendo l'uso di UUID sul cloud
-    val userUid: String,
+    val id: Int,
+    val userUid: String = "",
     val name: String,
     val address: String,
-    val notes: String,
+    val notes: String = "",
     val latitude: Double,
     val longitude: Double
 )
