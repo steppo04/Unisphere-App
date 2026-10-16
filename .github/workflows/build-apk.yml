@@ -1,5 +1,5 @@
 
-name: Build UniSphere APK
+name: Build UniSphere Release APK
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   build:
-    name: Build Android APK
+    name: Build Signed Release APK
     runs-on: ubuntu-latest
 
     steps:
@@ -28,17 +28,54 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Grant execute permission to Gradle wrapper
-        run: chmod +x ./gradlew
+      - name: Decode signing keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "ERRORE: manca il secret KEYSTORE_BASE64"
+            exit 1
+          fi
 
-      - name: Build release APK
-        run: ./gradlew assembleRelease
+          echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/unisphere-release.jks"
+
+          if [ ! -s "$RUNNER_TEMP/unisphere-release.jks" ]; then
+            echo "ERRORE: keystore vuoto o non valido"
+            exit 1
+          fi
+
+      - name: Build signed release APK
+        env:
+          KEYSTORE_PATH: ${{ runner.temp }}/unisphere-release.jks
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assembleRelease
+
+      - name: Verify APK signature
+        run: |
+          APK="app/build/outputs/apk/release/app-release.apk"
+
+          if [ ! -f "$APK" ]; then
+            echo "ERRORE: APK Release non trovato"
+            exit 1
+          fi
+
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -n 1)"
+
+          if [ -z "$APKSIGNER" ]; then
+            echo "ERRORE: apksigner non trovato"
+            exit 1
+          fi
+
+          "$APKSIGNER" verify --verbose "$APK"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: UniSphere-release-APK
-          path: app/build/outputs/apk/release/*.apk
+          path: app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 14
-
