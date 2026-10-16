@@ -31,13 +31,13 @@ jobs:
       - name: Grant execute permission to Gradle wrapper
         run: chmod +x ./gradlew
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug
+      - name: Build release APK
+        run: ./gradlew assembleRelease
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: UniSphere-debug-APK
-          path: app/build/outputs/apk/debug/*.apk
-          if-no-files-found: error
-          retention-days: 14
+       - name: Upload APK
+         uses: actions/upload-artifact@v4
+         with:
+           name: UniSphere-release-APK
+           path: app/build/outputs/apk/release/*.apk
+           if-no-files-found: error
+           retention-days: 14
