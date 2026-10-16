@@ -25,7 +25,7 @@ android {
     signingConfigs {
         create("release") {
             val keystorePath = System.getenv("KEYSTORE_PATH")
-dd                ?: error("KEYSTORE_PATH non configurato")
+                ?: error("KEYSTORE_PATH non configurato")
 
             storeFile = file(keystorePath)
             storePassword = System.getenv("KEYSTORE_PASSWORD")
