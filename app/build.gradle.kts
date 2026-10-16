@@ -22,20 +22,22 @@ android {
     }
 
 
-    signingConfigs {
-        create("release") {
-            val keystorePath = System.getenv("KEYSTORE_PATH")
-                ?: error("KEYSTORE_PATH non configurato")
+    
+signingConfigs {
+    create("release") {
+        val keystorePath = System.getenv("KEYSTORE_PATH")
+            ?: error("KEYSTORE_PATH non configurato")
 
-            storeFile = file(keystorePath)
-            storePassword = System.getenv("KEYSTORE_PASSWORD")
-                ?: error("KEYSTORE_PASSWORD non configurato")
-            keyAlias = System.getenv("KEY_ALIAS")
-                ?: error("KEY_ALIAS non configurato")
-            keyPassword = System.getenv("KEY_PASSWORD")
-                ?: error("KEY_PASSWORD non configurato")
-        }
+        storeFile = file(keystorePath)
+        storePassword = System.getenv("KEYSTORE_PASSWORD")
+            ?: error("KEYSTORE_PASSWORD non configurato")
+        keyAlias = System.getenv("KEY_ALIAS")
+            ?: error("KEY_ALIAS non configurato")
+        keyPassword = System.getenv("KEY_PASSWORD")
+            ?: error("KEY_PASSWORD non configurato")
     }
+}
+
 
     buildTypes {
         release {
