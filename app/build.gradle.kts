@@ -23,32 +23,42 @@ android {
 
 
     
-signingConfigs {
-    create("release") {
-        val keystorePath = System.getenv("KEYSTORE_PATH")
-            ?: error("KEYSTORE_PATH non configurato")
 
-        storeFile = file(keystorePath)
-        storePassword = System.getenv("KEYSTORE_PASSWORD")
-            ?: error("KEYSTORE_PASSWORD non configurato")
-        keyAlias = System.getenv("KEY_ALIAS")
-            ?: error("KEY_ALIAS non configurato")
-        keyPassword = System.getenv("KEY_PASSWORD")
-            ?: error("KEY_PASSWORD non configurato")
+signingConfigs {
+    val keystorePath = System.getenv("KEYSTORE_PATH")
+
+    if (keystorePath != null) {
+        create("release") {
+            storeFile = file(keystorePath)
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
+                ?: error("KEYSTORE_PASSWORD mancante")
+            keyAlias = System.getenv("KEY_ALIAS")
+                ?: error("KEY_ALIAS mancante")
+            keyPassword = System.getenv("KEY_PASSWORD")
+                ?: error("KEY_PASSWORD mancante")
+        }
     }
 }
 
 
-    buildTypes {
-        release {
+
+   
+buildTypes {
+    release {
+        if (System.getenv("KEYSTORE_PATH") != null) {
             signingConfig = signingConfigs.getByName("release")
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+        } else {
+            error("Per creare la Release firmata devi configurare il keystore")
         }
+
+        isMinifyEnabled = false
+        proguardFiles(
+            getDefaultProguardFile("proguard-android-optimize.txt"),
+            "proguard-rules.pro"
+        )
     }
+}
+
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
