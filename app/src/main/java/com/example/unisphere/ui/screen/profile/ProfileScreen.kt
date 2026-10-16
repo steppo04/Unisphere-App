@@ -55,7 +55,13 @@ fun ProfileScreen(
     }
 
     Scaffold(
-        topBar = { AppBar(title = "Impostazioni", navController = navController) },
+        topBar = {
+    AppBar(
+        title = "Impostazioni",
+        navController = navController,
+        viewModel = viewModel
+    )
+},
         bottomBar = { BottomNavigationBar(navController = navController) }
     ) { innerPadding ->
         Column(
