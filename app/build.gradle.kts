@@ -26,29 +26,34 @@ android {
 
 signingConfigs {
     val keystorePath = System.getenv("KEYSTORE_PATH")
+    val storePasswordEnv = System.getenv("KEYSTORE_PASSWORD")
+    val keyAliasEnv = System.getenv("KEY_ALIAS")
+    val keyPasswordEnv = System.getenv("KEY_PASSWORD")
 
-    if (keystorePath != null) {
+    if (
+        !keystorePath.isNullOrBlank() &&
+        !storePasswordEnv.isNullOrBlank() &&
+        !keyAliasEnv.isNullOrBlank() &&
+        !keyPasswordEnv.isNullOrBlank()
+    ) {
         create("release") {
             storeFile = file(keystorePath)
-            storePassword = System.getenv("KEYSTORE_PASSWORD")
-                ?: error("KEYSTORE_PASSWORD mancante")
-            keyAlias = System.getenv("KEY_ALIAS")
-                ?: error("KEY_ALIAS mancante")
-            keyPassword = System.getenv("KEY_PASSWORD")
-                ?: error("KEY_PASSWORD mancante")
+            storePassword = storePasswordEnv
+            keyAlias = keyAliasEnv
+            keyPassword = keyPasswordEnv
         }
     }
 }
 
-
-
-   
 buildTypes {
     release {
-        if (System.getenv("KEYSTORE_PATH") != null) {
+        if (
+            !System.getenv("KEYSTORE_PATH").isNullOrBlank() &&
+            !System.getenv("KEYSTORE_PASSWORD").isNullOrBlank() &&
+            !System.getenv("KEY_ALIAS").isNullOrBlank() &&
+            !System.getenv("KEY_PASSWORD").isNullOrBlank()
+        ) {
             signingConfig = signingConfigs.getByName("release")
-        } else {
-            error("Per creare la Release firmata devi configurare il keystore")
         }
 
         isMinifyEnabled = false
