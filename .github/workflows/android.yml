@@ -1,10 +1,12 @@
-name: Android Build CI
+name: UniSphere Signed Release APK
 
 on:
   push:
     branches: [ "main", "master" ]
-  pull_request:
-    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -22,18 +24,47 @@ jobs:
         cache: gradle
 
     - name: Crea il file local.properties
+      env:
+        API_BASE_URL: ${{ secrets.API_BASE_URL }}
+        SPOONACULAR_API_KEY: ${{ secrets.SPOONACULAR_API_KEY }}
       run: |
-        echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" > local.properties
-        echo "SPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }}" >> local.properties
+        echo "API_BASE_URL=$API_BASE_URL" > local.properties
+        echo "SPOONACULAR_API_KEY=$SPOONACULAR_API_KEY" >> local.properties
 
     - name: Dai i permessi a Gradle
       run: chmod +x gradlew
 
-    - name: Compila l'APK (Debug)
-      run: ./gradlew assembleDebug
+    - name: Decodifica il keystore
+      env:
+        KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+      run: |
+        test -n "$KEYSTORE_BASE64" || {
+          echo "Errore: manca il secret KEYSTORE_BASE64"
+          exit 1
+        }
+        echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/unisphere-release.jks"
+        test -s "$RUNNER_TEMP/unisphere-release.jks"
 
-    - name: Salva l'APK come Artifatto
+    - name: Compila la Release firmata
+      env:
+        KEYSTORE_PATH: ${{ runner.temp }}/unisphere-release.jks
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      run: ./gradlew assembleRelease
+
+    - name: Verifica la firma dell'APK
+      run: |
+        APK="app/build/outputs/apk/release/app-release.apk"
+        test -f "$APK"
+        APKSIGNER="$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -n 1)"
+        test -n "$APKSIGNER"
+        "$APKSIGNER" verify --verbose "$APK"
+
+    - name: Salva l'APK firmato come artefatto
       uses: actions/upload-artifact@v4
       with:
-        name: Unisphere-APK
-        path: app/build/outputs/apk/debug/app-debug.apk
+        name: UniSphere-release-APK
+        path: app/build/outputs/apk/release/app-release.apk
+        if-no-files-found: error
+        retention-days: 14
