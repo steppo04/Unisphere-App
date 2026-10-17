@@ -37,6 +37,9 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    LaunchedEffect(Unit) {
+        viewModel.loadUserProfile()
+    }
     val scrollState = rememberScrollState()
 
     var refreshTrigger by remember { mutableStateOf(System.currentTimeMillis()) }

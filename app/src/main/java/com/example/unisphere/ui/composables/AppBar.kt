@@ -33,7 +33,7 @@ import com.example.unisphere.ui.screen.profile.ProfileViewModel
 fun AppBar(
     title: String,
     navController: NavHostController? = null,
-    viewModel: ProfileViewModel = hiltViewModel()
+    viewModel: ProfileViewModel
 ) {
     // CORREZIONE: Usa collectAsState() per leggere i dati dallo StateFlow
     val state by viewModel.state.collectAsState()
