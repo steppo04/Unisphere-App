@@ -42,6 +42,7 @@ import com.example.unisphere.ui.composables.UniSphereAlertDialog
 import com.example.unisphere.ui.composables.UniSphereEmptyState
 import com.example.unisphere.ui.composables.UniSphereListItem
 import com.example.unisphere.ui.composables.UniSphereTextField
+import com.example.unisphere.ui.screen.profile.ProfileViewModel
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -52,12 +53,13 @@ import kotlin.math.roundToInt
 @Composable
 fun WalletScreen(
     navController: NavHostController,
-    viewModel: WalletViewModel = hiltViewModel()
+    viewModel: WalletViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel
 ) {
     val state by viewModel.state.collectAsState()
 
     Scaffold(
-        topBar = { AppBar(title = "UniWallet", navController = navController) },
+        topBar = { AppBar(title = "UniWallet", navController = navController,viewModel=profileViewModel) },
         bottomBar = { BottomNavigationBar(navController = navController) },
         floatingActionButton = {
             FloatingActionButton(

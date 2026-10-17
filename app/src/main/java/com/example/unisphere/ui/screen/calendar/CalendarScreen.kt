@@ -35,6 +35,7 @@ import com.example.unisphere.ui.composables.NavigationRoute
 import com.example.unisphere.ui.composables.UniSphereEmptyState
 import com.example.unisphere.ui.composables.UniSphereListItem
 import com.example.unisphere.ui.composables.UniSphereSectionHeader
+import com.example.unisphere.ui.screen.profile.ProfileViewModel
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -46,14 +47,15 @@ import java.util.Locale
 @Composable
 fun CalendarScreen(
     navController: NavHostController,
-    viewModel: CalendarViewModel = hiltViewModel()
+    viewModel: CalendarViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel
 ) {
     val state by viewModel.state.collectAsState()
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     Scaffold(
-        topBar = { AppBar(title = "UniCalendar", navController) },
+        topBar = { AppBar(title = "UniCalendar", navController, viewModel= profileViewModel) },
         bottomBar = { BottomNavigationBar(navController = navController) },
         floatingActionButton = {
             FloatingActionButton(

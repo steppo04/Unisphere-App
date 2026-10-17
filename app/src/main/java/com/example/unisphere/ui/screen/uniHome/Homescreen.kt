@@ -41,6 +41,7 @@ import com.example.unisphere.ui.composables.UniSphereAvatar
 import com.example.unisphere.ui.composables.UniSphereButton
 import com.example.unisphere.ui.composables.UniSphereListItem
 import com.example.unisphere.ui.composables.UniSphereTextField
+import com.example.unisphere.ui.screen.profile.ProfileViewModel
 
 private fun displayMemberName(member: HouseMemberDto): String {
     return member.fullName
@@ -54,7 +55,8 @@ private fun displayMemberName(member: HouseMemberDto): String {
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    viewModel: UniHomeViewModel = hiltViewModel()
+    viewModel: UniHomeViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -70,7 +72,8 @@ fun HomeScreen(
         topBar = {
             AppBar(
                 title = if (state.hasHouse) state.houseName else "UniHome",
-                navController = navController
+                navController = navController,
+                viewModel = profileViewModel
             )
         },
         bottomBar = { BottomNavigationBar(navController) },

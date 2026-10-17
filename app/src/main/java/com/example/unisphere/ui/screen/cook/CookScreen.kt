@@ -33,16 +33,18 @@ import com.example.unisphere.ui.composables.BottomNavigationBar
 import com.example.unisphere.ui.composables.NavigationRoute
 import com.example.unisphere.ui.composables.UniSphereEmptyState
 import com.example.unisphere.ui.composables.UniSphereTextField
+import com.example.unisphere.ui.screen.profile.ProfileViewModel
 
 @Composable
 fun CookScreen(
     navController: NavHostController,
-    viewModel: CookViewModel = hiltViewModel()
+    viewModel: CookViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel
 ) {
     val state by viewModel.state.collectAsState()
 
     Scaffold(
-        topBar = { AppBar(title = "UniChef", navController = navController) },
+        topBar = { AppBar(title = "UniChef", navController = navController,viewModel = profileViewModel) },
         bottomBar = { BottomNavigationBar(navController = navController) }
     ) { innerPadding ->
         Column(

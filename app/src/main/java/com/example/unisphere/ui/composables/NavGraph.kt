@@ -36,7 +36,10 @@ fun NavGraph(
         }
 
         composable<NavigationRoute.Homescreen> {
-            HomeScreen(navController)
+            HomeScreen(
+                navController = navController,
+                profileViewModel = profileViewModel
+            )
         }
 
         composable<NavigationRoute.SignInScreen> {
@@ -51,7 +54,10 @@ fun NavGraph(
         }
 
         composable<NavigationRoute.CalendarScreen> {
-            CalendarScreen(navController)
+            CalendarScreen(
+                navController = navController,
+                profileViewModel = profileViewModel
+            )
         }
 
         composable<NavigationRoute.AddCalendarEvent> {
@@ -59,15 +65,24 @@ fun NavGraph(
         }
 
         composable<NavigationRoute.WalletScreen> {
-            WalletScreen(navController)
+            WalletScreen(
+                navController = navController,
+                profileViewModel = profileViewModel
+            )
         }
 
         composable<NavigationRoute.MapScreen> {
-            MapScreen(navController)
+            MapScreen(
+                navController = navController,
+                profileViewModel = profileViewModel
+            )
         }
 
         composable<NavigationRoute.CookScreen> {
-            CookScreen(navController)
+            CookScreen(
+                navController = navController,
+                profileViewModel = profileViewModel
+            )
         }
 
         composable<NavigationRoute.RecipeDetailScreen> { backStackEntry ->

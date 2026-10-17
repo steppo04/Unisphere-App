@@ -47,6 +47,7 @@ import com.example.unisphere.ui.composables.UniSphereEmptyState
 import com.example.unisphere.ui.composables.UniSphereListItem
 import com.example.unisphere.ui.composables.UniSphereSectionHeader
 import com.example.unisphere.ui.composables.UniSphereTextField
+import com.example.unisphere.ui.screen.profile.ProfileViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -56,7 +57,8 @@ import org.osmdroid.views.overlay.Marker
 @Composable
 fun MapScreen(
     navController: NavHostController,
-    viewModel: MapViewModel = hiltViewModel()
+    viewModel: MapViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
@@ -75,7 +77,7 @@ fun MapScreen(
 
     Scaffold(
         topBar = {
-            AppBar(title = "UniMaps", navController = navController)
+            AppBar(title = "UniMaps", navController = navController, viewModel= profileViewModel)
         },
         bottomBar = {
             BottomNavigationBar(navController = navController)
