@@ -50,6 +50,40 @@ UniSphere-App offers a rich set of features to manage your daily life efficientl
     *   View comprehensive recipe details including ingredients, step-by-step instructions, preparation time, and servings.
     *   Mark and manage favorite recipes for quick access.
     *   Share delicious recipes with friends and family.
+## Screenshots
+
+<table>
+  <tr>
+     <td align="center">
+      <strong>Login</strong><br>
+      <img src="doc/Login.jpg" width="180" alt="Login page">
+    </td>
+    <td align="center">
+      <strong>UniHome</strong><br>
+      <img src="doc/UniHome.jpg" width="180" alt="UniHome - Shared House Management">
+    </td>
+    <td align="center">
+      <strong>UniWallet</strong><br>
+      <img src="doc/UniWallet.jpg" width="180" alt="UniWallet - Personal Finance Tracking">
+    </td>
+  </tr>
+  <tr>
+     <td align="center">
+      <strong>UniCalendar</strong><br>
+      <img src="doc/UniCalendar.jpg" width="180" alt="UniCalendar - Event Organization">
+    </td>
+    <td align="center">
+      <strong>UniMaps</strong><br>
+      <img src="doc/UniMaps.jpg" width="180" alt="UniMaps - Points of Interest">
+    </td>
+    <td align="center">
+      <strong>UniChef</strong><br>
+      <img src="doc/Unicook.jpg" width="180" alt="UniChef - Recipe Discovery">
+    </td>
+    <td></td>
+  </tr>
+</table>
+
 
 ##  Tech Stack
 
